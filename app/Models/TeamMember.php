@@ -12,23 +12,22 @@ class TeamMember extends Model
     protected $fillable = [
         'team_id',
         'user_id',
-        'role_id',
-        'status_id',
+        'role',
+        'status_id'
     ];
 
-    public function team() {
-        return $this->belongsTo(Team::class);
+    public function team()
+    {
+        return $this->belongsTo(MedicalTeam::class);
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function role() {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function teamMemberStatus() {
+    public function status()
+    {
         return $this->belongsTo(TeamMemberStatus::class);
     }
 }

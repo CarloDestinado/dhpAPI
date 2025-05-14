@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Team extends Model
+class PatientStatus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'team_name',
-        'description',
-        'project_id',
+        'name',
+        'description'
     ];
 
-    public function project() {
-        return $this->belongsTo(Project::class);
+    public function patients()
+    {
+        return $this->hasMany(User::class)->where('role', 'patient');
     }
 }

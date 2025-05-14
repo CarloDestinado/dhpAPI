@@ -5,11 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TaskStatus extends Model
+class TestStatus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
+        'description'
     ];
+
+    public function medicalTests()
+    {
+        return $this->hasMany(MedicalTest::class);
+    }
 }
