@@ -2,107 +2,103 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PatientProfileController;
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ProjectStatusController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\TaskStatusController;
-use App\Http\Controllers\TeamController;
+use App\Http\Controllers\DiagnosisController;
+use App\Http\Controllers\DiagnosisStatusController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicalTestController;
+use App\Http\Controllers\TestResultController;
+use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\PatientStatusController;
+use App\Http\Controllers\DoctorStatusController;
+use App\Http\Controllers\MedicalTeamController;
 use App\Http\Controllers\TeamMemberStatusController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserStatusController;
-use App\Http\Controllers\TeamMemberController;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| Health Diagnosis Profile API Routes
 |
 */
 
+// Public routes
 Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::put('/reset-password/{id}', [AuthenticationController::class, 'resetPassword']);
 
+// Authenticated routes
 Route::middleware('auth:sanctum')->group(function() {
 
-    // Authentcation
-    
+    // Authentication
     Route::post('/logout', [AuthenticationController::class, 'logout']);
 
-    // Profile
-    Route::get('/get-profile', [ProfileController::class, 'getProfile']);
-    Route::put('/edit-profile', [ProfileController::class, 'editProfile']);
-    Route::put('/change-password', [ProfileController::class, 'changePassword']);
+    // Patient Profile
+    Route::get('/get-profile', [PatientProfileController::class, 'getProfile']);
+    Route::put('/edit-profile', [PatientProfileController::class, 'editProfile']);
+    Route::put('/change-password', [PatientProfileController::class, 'changePassword']);
 
-    // User
-    Route::get('/get-users', [UserController::class, 'getUsers']);
-    Route::post('/add-user', [UserController::class, 'addUser']);
-    Route::put('/edit-user/{id}', [UserController::class, 'editUser']);
-    Route::delete('/delete-user/{id}', [UserController::class, 'deleteUser']);
+    // Patients (for doctors/admins)
+    Route::get('/get-patients', [PatientProfileController::class, 'getPatients']);
+    Route::post('/add-patient', [PatientProfileController::class, 'addPatient']);
+    Route::put('/edit-patient/{id}', [PatientProfileController::class, 'editPatient']);
+    Route::delete('/delete-patient/{id}', [PatientProfileController::class, 'deletePatient']);
 
-    // Project
-    Route::get('/get-projects', [ProjectController::class, 'getProjects']);
-    Route::post('/add-project', [ProjectController::class, 'addProject']);
-    Route::put('/edit-project/{id}', [ProjectController::class, 'editProject']);
-    Route::delete('/delete-project/{id}', [ProjectController::class, 'deleteProject']);
+    // Doctors
+    Route::get('/get-doctors', [DoctorController::class, 'getDoctors']);
+    Route::post('/add-doctor', [DoctorController::class, 'addDoctor']);
+    Route::put('/edit-doctor/{id}', [DoctorController::class, 'editDoctor']);
+    Route::delete('/delete-doctor/{id}', [DoctorController::class, 'deleteDoctor']);
 
-    // Task
-    Route::get('/get-tasks', [TaskController::class, 'getTasks']);
-    Route::post('/add-task', [TaskController::class, 'addTask']);
-    Route::put('/edit-task/{id}', [TaskController::class, 'editTask']);
-    Route::delete('/delete-task/{id}', [TaskController::class, 'deleteTask']);
-    Route::put('/assign-task/{id}', [TaskController::class, 'assignTask']);
-    Route::put('/replace-task/{id}', [TaskController::class, 'replaceTask']);
-    Route::put('/remove-task/{id}', [TaskController::class, 'removeTask']);
-    Route::put('/complete-task/{id}', [TaskController::class, 'completeTask']);
+    // Diagnosis
+    Route::get('/get-diagnoses', [DiagnosisController::class, 'getDiagnoses']);
+    Route::post('/add-diagnosis', [DiagnosisController::class, 'addDiagnosis']);
+    Route::put('/edit-diagnosis/{id}', [DiagnosisController::class, 'editDiagnosis']);
+    Route::delete('/delete-diagnosis/{id}', [DiagnosisController::class, 'deleteDiagnosis']);
+    Route::put('/assign-diagnosis/{id}', [DiagnosisController::class, 'assignDiagnosis']);
+    Route::put('/update-diagnosis-status/{id}', [DiagnosisController::class, 'updateDiagnosisStatus']);
 
-    // Team
-    Route::get('/get-teams', [TeamController::class, 'getTeams']);
-    Route::post('/add-team', [TeamController::class, 'addTeam']);
-    Route::put('/edit-team/{id}', [TeamController::class, 'editTeam']);
-    Route::delete('/delete-team/{id}', [TeamController::class, 'deleteTeam']);
-    Route::put('/assign-team/{id}', [TeamController::class, 'assignTeam']);
+    // Medical Tests
+    Route::get('/get-medical-tests', [MedicalTestController::class, 'getMedicalTests']);
+    Route::post('/add-medical-test', [MedicalTestController::class, 'addMedicalTest']);
+    Route::put('/edit-medical-test/{id}', [MedicalTestController::class, 'editMedicalTest']);
+    Route::delete('/delete-medical-test/{id}', [MedicalTestController::class, 'deleteMedicalTest']);
+    Route::put('/order-test/{id}', [MedicalTestController::class, 'orderTest']);
+    Route::put('/cancel-test/{id}', [MedicalTestController::class, 'cancelTest']);
 
-    // Team member
-    Route::get('/get-team-members', [TeamMemberController::class, 'getTeamMembers']);
-    Route::post('/add-team-member', [TeamMemberController::class, 'addTeamMember']);
-    Route::put('/edit-team-member/{id}', [TeamMemberController::class, 'editTeamMember']);
-    Route::delete('/delete-team-member/{id}', [TeamMemberController::class, 'deleteTeamMember']);
+    // Test Results
+    Route::get('/get-test-results', [TestResultController::class, 'getTestResults']);
+    Route::post('/add-test-result', [TestResultController::class, 'addTestResult']);
+    Route::put('/edit-test-result/{id}', [TestResultController::class, 'editTestResult']);
+    Route::delete('/delete-test-result/{id}', [TestResultController::class, 'deleteTestResult']);
+    Route::put('/upload-test-result/{id}', [TestResultController::class, 'uploadTestResult']);
 
-    // Role
-    Route::get('/get-roles', [RoleController::class, 'getRoles']);
-    Route::post('/add-role', [RoleController::class, 'addRole']);
-    Route::put('/edit-role/{id}', [RoleController::class, 'editRole']);
-    Route::delete('/delete-role/{id}', [RoleController::class, 'deleteRole']);
+    // Treatments
+    Route::get('/get-treatments', [TreatmentController::class, 'getTreatments']);
+    Route::post('/add-treatment', [TreatmentController::class, 'addTreatment']);
+    Route::put('/edit-treatment/{id}', [TreatmentController::class, 'editTreatment']);
+    Route::delete('/delete-treatment/{id}', [TreatmentController::class, 'deleteTreatment']);
+    Route::put('/prescribe-treatment/{id}', [TreatmentController::class, 'prescribeTreatment']);
+    Route::put('/complete-treatment/{id}', [TreatmentController::class, 'completeTreatment']);
 
-    // User Status
-    Route::get('/get-user-statuses', [UserStatusController::class, 'getUserStatuses']);
-    Route::post('/add-user-status', [UserStatusController::class, 'addUserStatus']);
-    Route::put('/edit-user-status/{id}', [UserStatusController::class, 'editUserStatus']);
-    Route::delete('/delete-user-status/{id}', [UserStatusController::class, 'deleteUserStatus']);
+    // Medical Teams
+    Route::get('/get-medical-teams', [MedicalTeamController::class, 'getMedicalTeams']);
+    Route::post('/add-medical-team', [MedicalTeamController::class, 'addMedicalTeam']);
+    Route::put('/edit-medical-team/{id}', [MedicalTeamController::class, 'editMedicalTeam']);
+    Route::delete('/delete-medical-team/{id}', [MedicalTeamController::class, 'deleteMedicalTeam']);
+    Route::put('/assign-to-team/{id}', [MedicalTeamController::class, 'assignToTeam']);
 
-    // Project Status
-    Route::get('/get-project-statuses', [ProjectStatusController::class, 'getProjectStatuses']);
-    Route::post('/add-project-status', [ProjectStatusController::class, 'addProjectStatus']);
-    Route::put('/edit-project-status/{id}', [ProjectStatusController::class, 'editProjectStatus']);
-    Route::delete('/delete-project-status/{id}', [ProjectStatusController::class, 'deleteProjectStatus']);
+    // Team Members
+    Route::get('/get-team-members', [MedicalTeamController::class, 'getTeamMembers']);
+    Route::post('/add-team-member', [MedicalTeamController::class, 'addTeamMember']);
+    Route::put('/edit-team-member/{id}', [MedicalTeamController::class, 'editTeamMember']);
+    Route::delete('/delete-team-member/{id}', [MedicalTeamController::class, 'deleteTeamMember']);
 
-    // Task Status
-    Route::get('/get-task-statuses', [TaskStatusController::class, 'getTaskStatuses']);
-    Route::post('/add-task-status', [TaskStatusController::class, 'addTaskStatus']);
-    Route::put('/edit-task-status/{id}', [TaskStatusController::class, 'editTaskStatus']);
-    Route::delete('/delete-task-status/{id}', [TaskStatusController::class, 'deleteTaskStatus']);
-
-    // Team Member Status
+    // Status Controllers
+    Route::get('/get-patient-statuses', [PatientStatusController::class, 'getPatientStatuses']);
+    Route::get('/get-doctor-statuses', [DoctorStatusController::class, 'getDoctorStatuses']);
+    Route::get('/get-diagnosis-statuses', [DiagnosisStatusController::class, 'getDiagnosisStatuses']);
     Route::get('/get-team-member-statuses', [TeamMemberStatusController::class, 'getTeamMemberStatuses']);
-    Route::post('/add-team-member-status', [TeamMemberStatusController::class, 'addTeamMemberStatus']);
-    Route::put('/edit-team-member-status/{id}', [TeamMemberStatusController::class, 'editTeamMemberStatus']);
-    Route::delete('/delete-team-member-status/{id}', [TeamMemberStatusController::class, 'deleteTeamMemberStatus']);
 });
